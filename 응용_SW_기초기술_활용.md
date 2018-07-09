@@ -45,7 +45,7 @@
 - Ping: HOST가 살아있는지 죽어있는지 체크하는 명령어
 - HTML (Hyper Text Markup Language)
 
-# 오라클 Database
+# 오라클 데이터베이스 예제
 
 ```SQL
 -- system 유저로 접속
@@ -71,6 +71,12 @@ CREATE TABLE reservation_tbl (
     status char(2)
 );
 
+CREATE TABLE bookinfo_tbl (
+    bookno NUMBER(4) PRIMARY KEY,
+    author CHAR(20),
+    bookname CHAR(20)
+);
+
 -- 생성 된 테이블 정보 확인
 DESC reservation_tbl;
 
@@ -81,6 +87,18 @@ INSERT INTO reservation_tbl (lentno, custname, bookno, outdate, status) VALUES (
 -- 모든 컬럼에 추가할 경우 컬럼 명 생략 가능
 INSERT INTO reservation_tbl VALUES ('2', '진선미', '102', '20171204', '20171206', '2');
 
+-- 도서 정보 데이터 추가
+INSERT INTO bookinfo_tbl VALUES (101, '박작가', '시스템분석');
+
+INSERT INTO bookinfo_tbl VALUES (102, '김작가', '전산개론');
+
+
 -- AS로 별칭 지정 가능
 SELECT count(*) AS "데이터 수" FROM reservation_tbl;
+
+-- 날짜를 년도-월-일 형식으로 변환
+SELECT to_char(outdate, 'yyyy-mm-dd') AS "대출일" FROM reservation_tbl;
+
+-- 2개의 테이블을 조인하여 결과 조회
+SELECT lentno AS "대출번호", custname AS "대출자", bookname AS "도서명", to_char(outdate, 'yyyy-mm-dd') AS "대출일", to_char(indate, 'yyyy-mm-dd') AS "반납일" FROM reservation_tbl a, bookinfo_tbl b WHERE a.bookno = b.bookno;
 ```
